@@ -2,18 +2,33 @@
 import { useEffect, useState } from "react"
 
 export default function InvoiceInfo() {
-  const today = new Date().toISOString().slice(0, 10)
-
+  const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
   const [name, setName] = useState("")
   const [date, setDate] = useState(today)
   const [invoiceNo, setInvoiceNo] = useState("")
 
-  // ✅ Generate invoice number AFTER hydration
   useEffect(() => {
-    setInvoiceNo(`INV-${Date.now()}`)
-  }, [])
+    const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
+    const todayKey = `invoice-counter-${today}`
 
-  // Format date deterministically (YYYY-MM-DD -> DD/MM/YYYY)
+    // Get the last counter from localStorage
+    const lastCounter = parseInt(localStorage.getItem(todayKey) || "0", 10)
+
+    // Increment for new invoice
+    const newCounter = lastCounter + 1
+
+    // Save back to localStorage
+    localStorage.setItem(todayKey, newCounter.toString())
+
+    // Format as 3 digits: 1 -> 001, 12 -> 012
+    const counterStr = String(newCounter).padStart(3, "0")
+
+    // Set invoice number
+    const todayFormatted = today.replace(/-/g, "") // 20260208
+    setInvoiceNo(`INV-${todayFormatted}-${counterStr}`)
+  }, []) // Run once on mount
+
+  // Format date for display (YYYY-MM-DD -> DD/MM/YYYY)
   const formattedDate = date ? date.split("-").reverse().join("/") : "-"
 
   return (
