@@ -24,3 +24,32 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Print styles: hide interactive controls and show print-only values */
+@media print {
+  /* hide buttons, selects and inputs */
+  button, select, input, .no-print {
+    display: none !important;
+  }
+
+  /* show elements intended only for print */
+  .print-only {
+    display: block !important;
+  }
+
+  /* make table more compact for print */
+  table {
+    font-size: 12px;
+  }
+
+  /* hide Actions column in procedure tables */
+  .procedure-table th:last-child,
+  .procedure-table td:last-child {
+    display: none !important;
+  }
+}
+
+/* default: hide print-only elements on screen */
+.print-only {
+  display: none;
+}
