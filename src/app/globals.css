@@ -27,6 +27,12 @@ body {
 
 /* Print styles: hide interactive controls and show print-only values */
 @media print {
+  /* Set page to A4 size */
+  @page {
+    size: A4;
+    margin: 0.5cm;
+  }
+
   /* hide buttons, selects and inputs */
   button, select, input, .no-print {
     display: none !important;
