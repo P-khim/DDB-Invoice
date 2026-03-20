@@ -27,9 +27,9 @@ body {
 
 /* Print styles: hide interactive controls and show print-only values */
 @media print {
-  /* Set page to A4 size */
+  /* Set page to A4 landscape size */
   @page {
-    size: A4;
+    size: A4 landscape;
     margin: 0.5cm;
   }
 

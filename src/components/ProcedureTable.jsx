@@ -42,6 +42,28 @@ export default function ProcedureTable({ procedures, setProcedures }) {
   const afterDiscount = row =>
     row.price - (row.price * row.discount) / 100
 
+  // Group procedures by category and calculate rowspan
+  const getCategoryRowspan = (index) => {
+    const currentCategory = procedures[index]?.category
+    if (!currentCategory) return 1
+    
+    let rowspan = 1
+    for (let i = index + 1; i < procedures.length; i++) {
+      if (procedures[i].category === currentCategory) {
+        rowspan++
+      } else {
+        break
+      }
+    }
+    return rowspan
+  }
+
+  // Check if this row's category was already rendered in a previous row
+  const shouldShowCategory = (index) => {
+    if (index === 0) return true
+    return procedures[index]?.category !== procedures[index - 1]?.category
+  }
+
   return (
     <div className="mb-6">
       <table className="w-full border text-sm procedure-table">
@@ -62,27 +84,31 @@ export default function ProcedureTable({ procedures, setProcedures }) {
             const category = groupedProcedures.find(
               c => c.category === row.category
             )
+            const showCategoryCell = shouldShowCategory(i)
+            const categoryRowspan = getCategoryRowspan(i)
 
             return (
               <tr key={i}>
-                {/* Category */}
-                <td className="border p-1">
-                  <select
-                    className="border w-full no-print"
-                    value={row.category}
-                    onChange={e =>
-                      updateRow(i, "category", e.target.value)
-                    }
-                  >
-                    <option value="">Select</option>
-                    {groupedProcedures.map(c => (
-                      <option key={c.category} value={c.category}>
-                        {c.category}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="print-only">{row.category}</div>
-                </td>
+                {/* Category - with rowspan for merged rows */}
+                {showCategoryCell && (
+                  <td className="border p-1" rowSpan={categoryRowspan}>
+                    <select
+                      className="border w-full no-print"
+                      value={row.category}
+                      onChange={e =>
+                        updateRow(i, "category", e.target.value)
+                      }
+                    >
+                      <option value="">Select</option>
+                      {groupedProcedures.map(c => (
+                        <option key={c.category} value={c.category}>
+                          {c.category}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="print-only">{row.category}</div>
+                  </td>
+                )}
 
                 {/* Procedure */}
                 <td className="border p-1">

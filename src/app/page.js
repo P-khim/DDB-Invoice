@@ -14,7 +14,7 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white shadow">
+    <div className="max-w-7xl mx-auto p-6 bg-white shadow">
       <div className="mb-6 no-print">
         <button
           onClick={handlePrint}
